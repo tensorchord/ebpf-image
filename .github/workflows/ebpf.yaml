@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'image version'
+        description: "image version"
         required: true
         type: string
       go_version:
-        description: 'Go version'
+        description: "Go version"
         required: false
         type: string
-        default: '1.25.5'
+        default: "1.26.2"
 
 jobs:
   build:
@@ -43,13 +43,13 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64
+          platforms: linux/amd64, linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
-          provenance: false  # avoid push manifest-list
+          provenance: false # avoid push manifest-list
           file: ebpf.Dockerfile
           build-args: |
             GO_VERSION=${{ inputs.go_version }}
